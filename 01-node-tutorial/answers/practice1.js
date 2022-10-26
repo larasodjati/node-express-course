@@ -1,6 +1,6 @@
 //write sentence variable from the practice2
 const sentence = require('./practice2');
-console.log('start')
+console.log('start');
 //require os module
 const os = require('os');
 const user = os.userInfo().username;
@@ -25,4 +25,4 @@ writeFile(
         console.log(user);
     }
 );
-console.log('end')
+console.log('end');
