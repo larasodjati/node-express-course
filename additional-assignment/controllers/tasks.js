@@ -1,7 +1,7 @@
 const Task = require('../models/tasks');
 const asyncWrapper = require('../middleware/async');
 const{createCustomError} = require('../errors/custom-error')
-
+const {capitalizeTaskName} = require('../utils/capitalize');
 
 const getAllTasks = asyncWrapper (async (req, res) => { 
         const tasks = await Task.find({})
@@ -10,8 +10,10 @@ const getAllTasks = asyncWrapper (async (req, res) => {
 })
 
 const createTask = asyncWrapper(async (req, res) =>{
+        req.body.name = capitalizeTaskName(req.body.name);
         const task = await Task.create(req.body);
         res.status(201).json({task});
+        
 })
 
 const getTask =  asyncWrapper(async (req, res, next) =>{
@@ -38,9 +40,10 @@ const deleteTask = asyncWrapper(async (req, res) =>{
 })
 
 const updateTask = asyncWrapper(async (req, res) =>{
-    
+       
       const{id:taskID} = req.params;
-        
+
+      req.body.name = capitalizeTaskName(req.body.name); 
       const task = await Task.findOneAndUpdate({_id: taskID}, req.body, {
         new: true,
         runValidators: true
