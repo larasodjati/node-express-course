@@ -23,6 +23,9 @@ const ipMiddleware = require('./middleware/ip-add');
 //6.middleware
 app.use(express.static('./public'))
 app.use(express.json());
+//Log the client's IP address with every request
+//15.
+app.use(ipMiddleware);
 
 
 /*3.routes 
@@ -33,17 +36,10 @@ app.get('/hello', (req,res) => {
 //5.
 app.use('/api/v1/tasks', tasks);
 
-//Log the client's IP address with every request
-//15.
-app.use('/api/v1/tasks', ipMiddleware);
-
 //10.
 app.use(notFound);
 //13.
 app.use(errorHandlerMiddleware);
-
-
-
 
 //2.set up the port //14.port var
 //const port = 3000;
