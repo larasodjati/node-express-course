@@ -1,24 +1,30 @@
 const jwt = require('jsonwebtoken');
+const CustomAPIError = require('../errors/custom-error')
 
-const authMiddleware = async (req, res, next) =>{
+const authMiddleware = (req, res, next) =>{
+    //console.log(req.headers.authorization);
+    //next();
+
     const authHeader = req.headers.authorization;
 
     if(!authHeader || !authHeader.startsWith('Bearer ')){
-        throw new Error ('unauthorized', 401);
+        throw new CustomAPIError('unauthorized', 401);
     }
 
     const token = authHeader.split(' ')[1]
 
     try{
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
-        console.log(decoded)
         
         const{id, username} = decoded;
         req.user = {id, username}
+        res.status(200).json({decoded});
 
-        next()
+        console.log(decoded)
+
+        next();
     }catch(error){
-        throw new Error ({msg: error.message}, 401)
+        throw new CustomAPIError ('Not authorized to access this route', 401)
     }
 }
 

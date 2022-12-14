@@ -6,12 +6,18 @@ const app = express();
 
 const mainRouter = require('./routes/main');
 
+const notFoundMiddleware = require('./middleware/not-found');
+const errorHandlerMiddleware = require('./middleware/error-handler');
+
 //middleware
 app.use(express.json());
 
 app.use('/api/v1', mainRouter);
 
-const port = process.env.PORT || 6000;
+app.use(notFoundMiddleware);
+app.use(errorHandlerMiddleware);
+
+const port = process.env.PORT || 3000;
 
 const start = async()=>{
     try{
